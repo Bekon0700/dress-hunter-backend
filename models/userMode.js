@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
     email: String,
     role: {
         type: String,
+        enum: ['seller', 'buyer'],
         default: 'buyer'
     },
     verified: {
