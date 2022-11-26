@@ -16,14 +16,27 @@ exports.addProduct = catchAsync( async (req, res) => {
 })
 
 exports.getAllCategory = catchAsync( async (req, res) => {
-    const product = {
-        ...req.body,
-        sellerId: req.user._id
-    }
-    const addProd = await Product.create(product)
+    const categories = await Product.aggregate([
+        {
+            $group: {
+                _id: "$category"
+            }
+        }
+    ])
 
     res.status(201).json({
         status: 'success',
-        addProd
+        length: categories.length,
+        categories
+    })
+})
+
+exports.getSpecificCategory = catchAsync( async (req, res) => {
+    const {categoryName} = req.params;
+    const products = await Product.find({category: categoryName})
+    res.status(201).json({
+        status: 'success',
+        length: products.length,
+        products
     })
 })
