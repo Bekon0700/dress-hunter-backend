@@ -89,9 +89,7 @@ exports.deleteUser = catchAsync(async (req, res) => {
 
 exports.updateUser = catchAsync(async (req, res) => {
     const id = req.params.userId;
-    
     await User.findByIdAndUpdate(id, {verified: req.body.verify})
-
     res.status(200).json({
         status: 'success',
     })
@@ -104,6 +102,7 @@ exports.myOrders = catchAsync(async (req, res) => {
 
     res.status(200).json({
         status: 'success',
+        count: oders.length,
         oders
     })
 })
