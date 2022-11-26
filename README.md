@@ -6,6 +6,9 @@
 
 |    URL      | req method         | permission  | return 
 | ------------- |:-------------:| -----:|-----
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
+| / | get  | admin | get all user
+| / | post | all  | create new user
+| /loginCreateToken| post | all | send access token
+| /:userId | patch | admin | update user
+| /:userId | delete | admin | delete user
+| /myOders | get | buyer | get all booking info

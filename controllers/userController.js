@@ -13,18 +13,22 @@ const signToken = (email) => {
 };
 
 
-exports.createToken = (req, res) => {
+exports.createToken = catchAsync(async(req, res) => {
+    const user = await User.findOne({ email: req.body.email })
+    if (!user) {
+        return next(new AppError('Not a valid user', 403))
+    }
     const token = signToken(req.body.email);
-
+    
     res.status(201).json({
         status: 'success',
         token,
     });
-};
+})
 
-exports.restrictedTo = (roles) =>{
+exports.restrictedTo = (roles) => {
     return (req, res, next) => {
-        if(!roles.includes(req.user.role)){
+        if (!roles.includes(req.user.role)) {
             return next(new AppError('You do not have the permission to do this operation', 403))
         }
         next()
@@ -42,8 +46,8 @@ exports.checkAuth = catchAsync(async (req, res, next) => {
         if (err) {
             return next(new AppError('Unauthorized user', 401))
         } else {
-            const user = await User.findOne({email: decoded.email})
-            if(!user){
+            const user = await User.findOne({ email: decoded.email })
+            if (!user) {
                 return next(new AppError('Not a valid token', 403))
             }
             req.user = user
@@ -87,9 +91,9 @@ exports.deleteUser = catchAsync(async (req, res) => {
     })
 })
 
-exports.updateUser = catchAsync(async (req, res) => {
+exports.updateSellerStatus = catchAsync(async (req, res) => {
     const id = req.params.userId;
-    await User.findByIdAndUpdate(id, {verified: req.body.verify})
+    await User.findByIdAndUpdate(id, { verified: req.body.verify })
     res.status(200).json({
         status: 'success',
     })
@@ -98,7 +102,7 @@ exports.updateUser = catchAsync(async (req, res) => {
 exports.myOrders = catchAsync(async (req, res) => {
     const buyerId = req.user._id;
 
-    const oders = await Booking.find({buyerId}).populate('productId')
+    const oders = await Booking.find({ buyerId }).populate('productId')
 
     res.status(200).json({
         status: 'success',
