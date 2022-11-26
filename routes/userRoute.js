@@ -4,7 +4,7 @@ const { createUser, getAllUser, updateUser, deleteUser, createToken, checkAuth, 
 const router = express.Router()
 
 router.route('/')
-    .get(getAllUser)
+    .get(checkAuth,restrictedTo(['admin']), getAllUser)
     .post(createUser)
 
 router.route('/loginCreateToken')

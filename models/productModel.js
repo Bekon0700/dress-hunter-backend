@@ -4,17 +4,25 @@ const productSchema = new mongoose.Schema({
         productName: String,
         category: String,
         contactNumber: String,
-        conditionType: String,
+        conditionType: {
+            type: String,
+            enum: ['Excellent', 'Good', 'Fair'],
+            default: 'Fair'
+        },
         originalPrice: Number,
         resalePrice: Number,
         location: String,
         ProductImg: String,
-        usingYear: Number,
+        usedTime: String,
+        isAdvetised: {
+            type: Boolean,
+            default: false
+        },
         createdAt: {
             type: Date,
             default: Date.now()
         },
-        userId: {
+        sellerId: {
             type: mongoose.Schema.ObjectId,
             ref: 'User',
         },
