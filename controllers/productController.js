@@ -20,7 +20,7 @@ exports.getAllCategory = catchAsync( async (req, res) => {
         {
             $group: {
                 _id: "$category"
-            }
+            },
         }
     ])
 
@@ -33,7 +33,7 @@ exports.getAllCategory = catchAsync( async (req, res) => {
 
 exports.getSpecificCategory = catchAsync( async (req, res) => {
     const {categoryName} = req.params;
-    const products = await Product.find({category: categoryName})
+    const products = await Product.find({category: categoryName}).populate('sellerId')
     res.status(201).json({
         status: 'success',
         length: products.length,

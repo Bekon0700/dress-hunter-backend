@@ -4,6 +4,7 @@ const APIFeature = require('./../utils/apiFeatures')
 const jwt = require('jsonwebtoken');
 const User = require('../models/userMode');
 const { findById, findByIdAndUpdate } = require('../models/userMode');
+const Booking = require('../models/bookingModel');
 
 const signToken = (email) => {
     return jwt.sign({ email }, process.env.JWT_SECRET, {
@@ -93,6 +94,17 @@ exports.updateUser = catchAsync(async (req, res) => {
 
     res.status(200).json({
         status: 'success',
+    })
+})
+
+exports.myOrders = catchAsync(async (req, res) => {
+    const buyerId = req.user._id;
+
+    const oders = await Booking.find({buyerId}).populate('productId')
+
+    res.status(200).json({
+        status: 'success',
+        oders
     })
 })
 
