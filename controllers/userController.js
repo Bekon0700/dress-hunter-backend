@@ -81,6 +81,15 @@ exports.createUser = catchAsync(async (req, res) => {
     })
 })
 
+exports.singleUser = catchAsync(async (req, res) => {
+    const user = req.user
+    console.log(user)
+    res.status(201).json({
+        status: 'success',
+        user
+    })
+})
+
 exports.deleteUser = catchAsync(async (req, res) => {
     const id = req.params.userId
 
