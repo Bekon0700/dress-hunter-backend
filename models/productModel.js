@@ -14,6 +14,11 @@ const productSchema = new mongoose.Schema({
         location: String,
         ProductImg: String,
         usedTime: String,
+        img: String,
+        sold: {
+            type: Boolean,
+            default: false,
+        },
         isAdvetised: {
             type: Boolean,
             default: false

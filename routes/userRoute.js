@@ -1,5 +1,5 @@
 const express = require('express');
-const { createUser, getAllUser, deleteUser, createToken, checkAuth, restrictedTo, myOrders, updateSellerStatus, singleUser } = require('../controllers/userController');
+const { createUser, getAllUser, deleteUser, createToken, checkAuth, restrictedTo, myOrders, updateSellerStatus, singleUser, myProducts } = require('../controllers/userController');
 
 const router = express.Router()
 
@@ -16,7 +16,10 @@ router.route('/single-user')
 router.route('/myOders')
     .get(checkAuth, restrictedTo(['buyer']), myOrders)
 
-router.route('/:userId')
+router.route('/myProducts')
+    .get(checkAuth, restrictedTo(['seller']), myProducts)
+
+router.route('/:id')
     .patch(checkAuth, restrictedTo(['admin']) , updateSellerStatus)
     .delete(checkAuth, restrictedTo(['admin']), deleteUser)
 

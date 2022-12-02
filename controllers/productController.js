@@ -15,6 +15,18 @@ exports.addProduct = catchAsync( async (req, res) => {
     })
 })
 
+exports.advertiseProduct = catchAsync( async (req, res) => {
+    const id = req.body.id;
+
+    const addProd = await Product.findByIdAndUpdate(id, {
+        isAdvetised: true
+    })
+
+    res.status(200).json({
+        status: 'success',
+    })
+})
+
 exports.getAllCategory = catchAsync( async (req, res) => {
     const categories = await Product.aggregate([
         {
@@ -28,6 +40,15 @@ exports.getAllCategory = catchAsync( async (req, res) => {
         status: 'success',
         length: categories.length,
         categories
+    })
+})
+
+exports.getAdverProducts = catchAsync( async (req, res) => {
+    const products = await Product.find({isAdvetised: true}).populate('sellerId')
+
+    res.status(201).json({
+        status: 'success',
+        products
     })
 })
 

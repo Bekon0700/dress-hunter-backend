@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userMode');
 const { findById, findByIdAndUpdate } = require('../models/userMode');
 const Booking = require('../models/bookingModel');
+const Product = require('../models/productModel');
 
 const signToken = (email) => {
     return jwt.sign({ email }, process.env.JWT_SECRET, {
@@ -38,6 +39,8 @@ exports.restrictedTo = (roles) => {
 
 
 exports.checkAuth = catchAsync(async (req, res, next) => {
+    console.log(req.headers.authorization)
+    console.log(req.headers.userId)
     const header = req.headers.authorization?.split(' ')[1]
     if (!header) {
         return next(new AppError('Unauthorized user', 401))
@@ -91,7 +94,8 @@ exports.singleUser = catchAsync(async (req, res) => {
 })
 
 exports.deleteUser = catchAsync(async (req, res) => {
-    const id = req.params.userId
+    const id = req.params.id
+    console.log(id)
 
     const user = await User.findByIdAndDelete(id)
 
@@ -101,7 +105,7 @@ exports.deleteUser = catchAsync(async (req, res) => {
 })
 
 exports.updateSellerStatus = catchAsync(async (req, res) => {
-    const id = req.params.userId;
+    const id = req.body.userId;
     await User.findByIdAndUpdate(id, { verified: req.body.verify })
     res.status(200).json({
         status: 'success',
@@ -117,6 +121,17 @@ exports.myOrders = catchAsync(async (req, res) => {
         status: 'success',
         count: oders.length,
         oders
+    })
+})
+
+exports.myProducts = catchAsync(async (req, res) => {
+    const sellerId = req.user._id;
+
+    const products = await Product.find({ sellerId })
+
+    res.status(200).json({
+        status: 'success',
+        products: products
     })
 })
 
